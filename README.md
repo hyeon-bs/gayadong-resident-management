@@ -421,7 +421,7 @@ if ( count = PAGE_NUM) {                    hit any key\n");
 - 개인정보 조회 기능은 프로젝트에서 제외헀다.
 
 ## 실행 결과
-<img src="https://github.com/hyeon-bs/Portfolio/blob/ac5a3826254e51b25857e54a7fe71de1126bd8f4/%E1%84%80%E1%85%A1%E1%84%8B%E1%85%A3%E1%84%83%E1%85%A9%E1%86%BC%20%E1%84%8C%E1%85%AE%E1%84%86%E1%85%B5%E1%86%AB%20%E1%84%80%E1%85%AA%E1%86%AB%E1%84%85%E1%85%B5%20%E1%84%89%E1%85%B5%E1%84%89%E1%85%B3%E1%84%90%E1%85%A6%E1%86%B7/static/main_%E1%84%92%E1%85%AA%E1%84%86%E1%85%A7%E1%86%AB.jpg" width="650" height="400" /></p>
+<img src="docs/static/main_화면.jpg" width="650" height="400" /></p>
 메인화면
 
 <img src="https://github.com/hyeon-bs/Portfolio/blob/ac5a3826254e51b25857e54a7fe71de1126bd8f4/%E1%84%80%E1%85%A1%E1%84%8B%E1%85%A3%E1%84%83%E1%85%A9%E1%86%BC%20%E1%84%8C%E1%85%AE%E1%84%86%E1%85%B5%E1%86%AB%20%E1%84%80%E1%85%AA%E1%86%AB%E1%84%85%E1%85%B5%20%E1%84%89%E1%85%B5%E1%84%89%E1%85%B3%E1%84%90%E1%85%A6%E1%86%B7/static/information_%E1%84%92%E1%85%AA%E1%84%86%E1%85%A7%E1%86%AB.png" width="650" height="400" /></p>
