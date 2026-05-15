@@ -424,11 +424,11 @@ if ( count = PAGE_NUM) {                    hit any key\n");
 <img src="docs/static/main_화면.jpg" width="650" height="400" /></p>
 메인화면
 
-<img src="https://github.com/hyeon-bs/Portfolio/blob/ac5a3826254e51b25857e54a7fe71de1126bd8f4/%E1%84%80%E1%85%A1%E1%84%8B%E1%85%A3%E1%84%83%E1%85%A9%E1%86%BC%20%E1%84%8C%E1%85%AE%E1%84%86%E1%85%B5%E1%86%AB%20%E1%84%80%E1%85%AA%E1%86%AB%E1%84%85%E1%85%B5%20%E1%84%89%E1%85%B5%E1%84%89%E1%85%B3%E1%84%90%E1%85%A6%E1%86%B7/static/information_%E1%84%92%E1%85%AA%E1%84%86%E1%85%A7%E1%86%AB.png" width="650" height="400" /></p>
+<img src="docs/static/db_정보조회.png" height="400" /></p>
 조회화면에서 데이터베이스에 들어있는 모든 정보를 조회할 수 있음.
 
-<img src="https://github.com/hyeon-bs/Portfolio/blob/ac5a3826254e51b25857e54a7fe71de1126bd8f4/%E1%84%80%E1%85%A1%E1%84%8B%E1%85%A3%E1%84%83%E1%85%A9%E1%86%BC%20%E1%84%8C%E1%85%AE%E1%84%86%E1%85%B5%E1%86%AB%20%E1%84%80%E1%85%AA%E1%86%AB%E1%84%85%E1%85%B5%20%E1%84%89%E1%85%B5%E1%84%89%E1%85%B3%E1%84%90%E1%85%A6%E1%86%B7/static/disorder_%E1%84%8C%E1%85%A9%E1%84%92%E1%85%AC%E1%84%92%E1%85%AA%E1%84%86%E1%85%A7%E1%86%AB.png" width="650" height="400" /></p>
+<img src="docs/static/연락처지정.png" width="650" height="400" /></p>
 주민 이름을 검색하면 정보를 볼 수 있고 연락을 지정할 수 있다.
 
-<img src="https://github.com/hyeon-bs/Portfolio/blob/673cd570f1aae2a0715a4a601bc6c7a7744abd77/%E1%84%80%E1%85%A1%E1%84%8B%E1%85%A3%E1%84%83%E1%85%A9%E1%86%BC%20%E1%84%8C%E1%85%AE%E1%84%86%E1%85%B5%E1%86%AB%20%E1%84%80%E1%85%AA%E1%86%AB%E1%84%85%E1%85%B5%20%E1%84%89%E1%85%B5%E1%84%89%E1%85%B3%E1%84%90%E1%85%A6%E1%86%B7/static/%E1%84%89%E1%85%A9%E1%84%83%E1%85%B3%E1%86%A8%E1%84%87%E1%85%AE%E1%86%AB%E1%84%8B%E1%85%B1%20%E1%84%8C%E1%85%A9%E1%84%92%E1%85%AC.png" width="650" height="400" /></p>
+<img src="docs/static/주민번호_소득분위.png" width="650" height="400" /></p>
 이름과 주민등록번호를 입력하면 소득분위를 볼 수 있다.
