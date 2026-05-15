@@ -1,0 +1,233 @@
+// win32 Visual C 2010 이상컴파일시 추가
+// 프로그램 가장 첫 줄에 추가할 것
+#define _CRT_SECURE_NO_WARNINGS
+//-----------------------------------------
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <ctype.h>
+#include <string.h>
+#include <conio.h>
+
+/* for oracle */
+#include <sqlda.h>
+#include <sqlca.h>
+#include <sqlcpr.h>
+
+
+// win32 Visual C 2010 이상컴파일시 추가
+#define getch() _getch()
+//-----------------------------------------
+
+/*---------------  화면 커서 위치 제어 ----------------------*/
+#include < windows.h >
+void gotoxy(int x, int y) ;
+void getxy(int *x, int *y) ;
+void clrscr(void) ;
+/*-----------------------------------------------------------*/
+void print_screen(char fname[]);
+void DB_connect();
+void I_get_tuple();
+
+void sql_error();
+
+EXEC SQL BEGIN DECLARE SECTION;
+	VARCHAR uid[80];
+	VARCHAR pwd[20];
+EXEC SQL END DECLARE SECTION;
+
+#define getch() _getch()
+
+
+void main()
+{
+	DB_connect();
+	I_get_tuple();
+	getch();
+}
+void DB_connect()
+{
+   strcpy((char *)uid.arr,"b20163374@//sedb.deu.ac.kr:1521/orcl");
+   uid.len = (short) strlen((char *)uid.arr);
+   strcpy((char *)pwd.arr,"20163374");
+   pwd.len = (short) strlen((char *)pwd.arr);
+
+   EXEC SQL CONNECT :uid IDENTIFIED BY :pwd;
+
+	// connection이 실패했을경우의 처리부분
+
+	if (sqlca.sqlcode != 0 && sqlca.sqlcode != -1405){ 
+		printf("\7Cconnect error: %s", sqlca.sqlerrm.sqlerrmc);
+		getch();
+		exit(-1);
+	}
+
+    printf("Oracle Connect SUCCESS by %s\n", uid.arr);
+}
+
+#define PAGE_NUM 20
+void I_get_tuple()  //개인정보 조회
+{
+/* --------------------------------------------------------------------------
+   Retrieve the current maximum employee number
+-------------------------------------------------------------------------- */
+EXEC SQL BEGIN DECLARE SECTION;
+   varchar i_name[100];
+   varchar i_social[150];
+   varchar i_spouse[150];
+   varchar i_sal[150];
+   varchar i_fam[100];
+   varchar i_protrank[100];
+   varchar i_tel[200];
+   varchar i_address[400];
+   varchar i_child[100];
+   varchar i_disrank[100];
+
+   char dynstmti_1[1000];   
+EXEC SQL END DECLARE SECTION;
+
+   int x, y, count=0, i ;
+
+
+   /* Register sql_error() as the error handler. */
+   EXEC SQL WHENEVER SQLERROR DO sql_error("\7ORACLE ERROR:\n");
+
+
+   /* 사용자 입력 */
+   clrscr();
+
+   print_screen("scr_select.txt");
+      
+   
+   /* 실행시킬 SQL 문장*/
+   sprintf(dynstmti_1,"SELECT J_NAME, J_SOCIAL_NUM, J_SPOUSE_NUM, J_SAL, J_FAM, J_PROT_RANK, J_TEL, J_ADDRESS, J_CHILD, J_DIS_RANK FROM JUMIN"); 
+
+   /* select 문장이 제대로 구성되어 있는지 화면에 찍어봄 */
+   //printf("dynstmt:%s\n", dynstmt);
+
+   EXEC SQL PREPARE SI_1 FROM :dynstmti_1 ;
+
+   /* cursor 선언 */
+   EXEC SQL DECLARE c_cursori_1 CURSOR FOR SI_1 ; 
+
+   /* cursor open */
+   EXEC SQL OPEN c_cursori_1 ; 
+
+   EXEC SQL WHENEVER NOT FOUND DO break;
+
+
+   x = 1;
+   y = 9 ;
+
+   for (;;)
+    {
+        EXEC SQL FETCH c_cursor INTO :i_name, :i_social, :i_spouse, :i_sal, :i_fam, :i_protrank, :i_tel, :i_address, :i_child, :i_disrank;
+
+	i_name.arr[i_name.len] = '\0' ;
+	i_social.arr[i_social.len] = '\0';
+	i_spouse.arr[i_spouse.len] = '\0' ;
+	i_sal.arr[i_sal.len] = '\0';
+	i_fam.arr[i_fam.len] = '\0' ;
+	i_protrank.arr[i_protrank.len] = '\0';
+	i_tel.arr[i_tel.len] = '\0' ;
+	i_address.arr[i_address.len] = '\0';
+	i_child.arr[i_child.len] = '\0';
+	i_disrank.arr[i_disrank.len] = '\0';
+
+	gotoxy(x,y);
+	printf("     %-10s     |       %-20s       |       %-20s       |     %-10s     |     %-10s     |     %-10s     |     %-15s     |        %-50s       |     %-10s     |      %-5s     ", i_name.arr, i_social.arr, i_spouse.arr, i_sal.arr, i_fam.arr, i_protrank.arr, i_tel.arr, i_address.arr, i_child.arr, i_disrank.arr);
+	y++;
+	count++;
+	if( count == PAGE_NUM){
+	   printf("\n                                  hit any key\n");
+	   count = 0;
+	   getch();
+
+	   gotoxy(0,9); //이전 화면 부분 클리어
+           for(i= 0; i < PAGE_NUM; i++){
+		printf("                                                          \n");
+	   }
+
+	   y = 9 ;
+	}
+
+    }
+	printf("                              (END)\n");
+
+    /* Close the cursor. */
+   EXEC SQL CLOSE c_cursori_1;
+
+   EXEC SQL COMMIT ;
+}
+
+void print_screen(char fname[])
+{
+	FILE *fp;
+	char line[100];
+
+	if ( (fp = fopen(fname,"r"))  == NULL ){
+		printf("file open error\n");
+		getch();
+		exit(-1);
+	}
+	while(1)
+	{
+		if( fgets(line, 99, fp) == NULL){
+		     break;
+		}
+		printf("%s", line);
+	}
+
+	fclose(fp);
+}
+
+/* --------------------------------------------------------------------------
+int sql_error()
+
+   errrpt prints the ORACLE error msg and number.
+-------------------------------------------------------------------------- */
+void sql_error(char *msg)
+{
+    char err_msg[128];
+    size_t buf_len, msg_len;
+
+    EXEC SQL WHENEVER SQLERROR CONTINUE;
+
+    printf("\n%s\n", msg);
+    buf_len = sizeof (err_msg);
+    sqlglm(err_msg, &buf_len, &msg_len);
+    printf("%.*s\n", msg_len, err_msg);
+
+    getch();
+    EXEC SQL ROLLBACK WORK;
+    //exit(EXIT_FAILURE);
+}
+/*---------------  화면 커서 제어 함수 --------------------*/
+#define STD_HANDLE GetStdHandle(STD_OUTPUT_HANDLE)
+
+void gotoxy(int x, int y)
+{
+    COORD Cur= {(SHORT)x, (SHORT) y};
+
+    SetConsoleCursorPosition(STD_HANDLE, Cur);
+}
+
+void getxy(int *x, int *y)
+{
+    CONSOLE_SCREEN_BUFFER_INFO Buf ;
+
+    GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &Buf);
+    *x = (int)Buf.dwCursorPosition.X ;
+    *y = (int)Buf.dwCursorPosition.Y ;
+ 
+}
+
+void clrscr(void)
+{
+    COORD Cur= {0, 0};
+    unsigned long dwLen;
+
+    FillConsoleOutputCharacter(STD_HANDLE, ' ', 80*25, Cur, &dwLen);
+}
+
+/*---------------------------------------------------------*/
