@@ -109,22 +109,22 @@ EXEC SQL PREPARE S FROM :dynstmt;
 ## 실행 결과
 
 ### 메인 화면
-<img src="docs/static/main_화면.jpg" width="650" height="400" />
+<img src="docs/static/main_화면.jpg" width="650" height="400" />
 
 시스템 실행 시 주민 관리 기능과 조회 기능을 선택할 수 있는 메인 화면입니다.
 
 ### 데이터베이스 전체 조회 화면
-<img src="docs/static/db_정보조회.png" height="400" />
+<img src="docs/static/db_정보조회.png" height="400" />
 
 Oracle DB에 저장된 주민 데이터를 조회할 수 있으며, 커서 기반 FETCH 방식으로 데이터를 출력합니다.
 
 ### 연락처 및 관리 상태 지정 화면
-<img src="docs/static/연락처지정.png" width="650" height="400" />
+<img src="docs/static/연락처지정.png" width="650" height="400" />
 
 주민 이름 검색 후 연락 여부를 등록할 수 있으며, 연락 횟수 기반 관리 상태 업데이트 기능을 제공합니다.
 
 ### 주민번호 기반 소득분위 조회 화면
-<img src="docs/static/주민번호_소득분위.png" width="650" height="400" />
+<img src="docs/static/주민번호_소득분위.png" width="650" height="400" />
 
 이름과 주민등록번호를 입력하면 실시간으로 소득분위를 계산 및 출력합니다.
 
