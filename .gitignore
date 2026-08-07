@@ -1,0 +1,25 @@
+# Java build
+*.class
+*.jar
+*.war
+build/
+dist/
+target/
+
+# Secrets
+.env
+db.properties
+credentials.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
