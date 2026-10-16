@@ -28,6 +28,7 @@ void clrscr(void) ;
 void print_screen(char fname[]);
 void DB_connect();
 void Get_tuple();
+void Update_tuple();
 
 void sql_error();
 
@@ -43,6 +44,8 @@ void main()
 {
 	DB_connect();
 	Get_tuple();
+	Update_tuple();
+	Get_tuple();
 	getch();
 }
 void DB_connect()
@@ -56,7 +59,7 @@ void DB_connect()
 
 	// connection이 실패했을경우의 처리부분
 
-	if (sqlca.sqlcode != 0 && sqlca.sqlcode != -1405){ 
+	if (sqlca.sqlcode != 0 && sqlca.sqlcode != -1405){
 		printf("\7Cconnect error: %s", sqlca.sqlerrm.sqlerrmc);
 		getch();
 		exit(-1);
@@ -66,24 +69,18 @@ void DB_connect()
 }
 
 #define PAGE_NUM 20
-void Get_tuple()  //개인정보 조회
+void Get_tuple()
 {
 /* --------------------------------------------------------------------------
    Retrieve the current maximum employee number
 -------------------------------------------------------------------------- */
 EXEC SQL BEGIN DECLARE SECTION;
-   varchar i_name[100];
-   varchar i_social[150];
-   varchar i_spouse[150];
-   varchar i_sal[150];
-   varchar i_fam[100];
-   varchar i_protrank[100];
-   varchar i_tel[200];
-   varchar i_address[400];
-   varchar i_child[100];
-   varchar i_disrank[100];
+   varchar name[100];
+   varchar social[200];
+   varchar grade[500];
+   varchar benefits[500];
 
-   char dynstmti_1[1000];   
+   char dynstmt[1000];
 EXEC SQL END DECLARE SECTION;
 
    int x, y, count=0, i ;
@@ -92,50 +89,39 @@ EXEC SQL END DECLARE SECTION;
    /* Register sql_error() as the error handler. */
    EXEC SQL WHENEVER SQLERROR DO sql_error("\7ORACLE ERROR:\n");
 
-
    /* 사용자 입력 */
    clrscr();
 
    print_screen("scr_select.txt");
-      
-   
-   /* 실행시킬 SQL 문장*/
-   sprintf(dynstmti_1,"SELECT J_NAME, J_SOCIAL_NUM, J_SPOUSE_NUM, J_SAL, J_FAM, J_PROT_RANK, J_TEL, J_ADDRESS, J_CHILD, J_DIS_RANK FROM JUMIN"); 
 
-   /* select 문장이 제대로 구성되어 있는지 화면에 찍어봄 */
+   /* 실행시킬 SQL 문장*/
+   sprintf(dynstmt, "SELECT  D_NAME, D_SOCIAL_NUM, D_GRADE, D_BENEFITS FROM DISORDER");
    //printf("dynstmt:%s\n", dynstmt);
 
-   EXEC SQL PREPARE SI_1 FROM :dynstmti_1 ;
+   EXEC SQL PREPARE S3 FROM :dynstmt ;
 
    /* cursor 선언 */
-   EXEC SQL DECLARE c_cursori_1 CURSOR FOR SI_1 ; 
+   EXEC SQL DECLARE c_cursor CURSOR FOR S3 ;
 
    /* cursor open */
-   EXEC SQL OPEN c_cursori_1 ; 
+   EXEC SQL OPEN c_cursor ;
 
    EXEC SQL WHENEVER NOT FOUND DO break;
 
 
-   x = 1;
-   y = 9 ;
+   x = 2;
+   y = 10;
 
    for (;;)
     {
-        EXEC SQL FETCH c_cursori_1 INTO :i_name, :i_social, :i_spouse, :i_sal, :i_fam, :i_protrank, :i_tel, :i_address, :i_child, :i_disrank;
-
-	i_name.arr[i_name.len] = '\0' ;
-	i_social.arr[i_social.len] = '\0';
-	i_spouse.arr[i_spouse.len] = '\0' ;
-	i_sal.arr[i_sal.len] = '\0';
-	i_fam.arr[i_fam.len] = '\0' ;
-	i_protrank.arr[i_protrank.len] = '\0';
-	i_tel.arr[i_tel.len] = '\0' ;
-	i_address.arr[i_address.len] = '\0';
-	i_child.arr[i_child.len] = '\0';
-	i_disrank.arr[i_disrank.len] = '\0';
+        EXEC SQL FETCH c_cursor INTO :name, :social, :grade, :benefits;
+	name.arr[name.len] = '\0' ;
+	social.arr[social.len] = '\0';
+	grade.arr[grade.len] = '\0';
+        benefits.arr[benefits.len] = '\0';
 
 	gotoxy(x,y);
-	printf("     %-10s     |       %-20s       |       %-20s       |     %-10s     |     %-10s     |     %-10s     |     %-15s     |        %-50s       |     %-10s     |      %-5s     ", i_name.arr, i_social.arr, i_spouse.arr, i_sal.arr, i_fam.arr, i_protrank.arr, i_tel.arr, i_address.arr, i_child.arr, i_disrank.arr);
+	printf("     %-10s     |     %-20s     |     %-20s     |     %-10s     ", name.arr, social.arr, grade.arr, benefits.arr);
 	y++;
 	count++;
 	if( count == PAGE_NUM){
@@ -148,17 +134,45 @@ EXEC SQL END DECLARE SECTION;
 		printf("                                                          \n");
 	   }
 
-	   y = 9 ;
+	   y = 10 ;
 	}
 
     }
 	printf("                              (END)\n");
 
     /* Close the cursor. */
-   EXEC SQL CLOSE c_cursori_1;
+   EXEC SQL CLOSE c_cursor;
 
    EXEC SQL COMMIT ;
 }
+
+void Update_tuple() //이름으로 대상자를 찾아 이달의 복지 혜택을 갱신
+{
+EXEC SQL BEGIN DECLARE SECTION;
+   char dynstmt2[1000];
+EXEC SQL END DECLARE SECTION;
+   char no_temp2[100];
+   char no_benefit[500];
+
+   EXEC SQL WHENEVER SQLERROR DO sql_error("\7ORACLE ERROR:\n");
+
+   gotoxy(14,6);
+   printf("이름 :");
+   gets(no_temp2);
+
+   gotoxy(14,8);
+   printf("이달의 혜택 :");
+   gets(no_benefit);
+
+   sprintf(dynstmt2, "update disorder set d_benefits = '%s' where d_name like '%%%s%%' and rownum = 1", no_benefit, no_temp2);
+
+   EXEC SQL EXECUTE IMMEDIATE :dynstmt2;
+   EXEC SQL COMMIT WORK;
+
+   printf("업데이트완료");
+}
+
+
 
 void print_screen(char fname[])
 {
@@ -219,7 +233,7 @@ void getxy(int *x, int *y)
     GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &Buf);
     *x = (int)Buf.dwCursorPosition.X ;
     *y = (int)Buf.dwCursorPosition.Y ;
- 
+
 }
 
 void clrscr(void)

@@ -34,6 +34,7 @@ Oracle DB와 Pro*C(Embedded SQL)를 활용하여 대량의 주민 데이터를 �
 | 소득분위 분류 | 이름·주민등록번호 기반 실시간 소득분위 자동 분류 (1~5분위) |
 | 혼인 신고 | 혼인 정보 조회 및 업데이트 |
 | 무료급식 대상 조회 | 복지 조건 기반 무료급식 대상자 필터링 |
+| 장애인 등급 조회 | 장애인 등급 및 복지 혜택 조회, 이름 검색 기반 혜택 갱신 |
 
 ## 프로젝트 목적 및 내용
 
@@ -66,13 +67,13 @@ EXEC SQL COMMIT WORK;
 
 이름과 주민등록번호를 기반으로 주민 데이터를 검색하고 Oracle `CASE WHEN` 문을 활용하여 실시간 소득분위 분류 기능을 구현했습니다.
 
-| 분위 | 월 소득 기준 |
+| 분위 | 소득 기준 (j_sal 값 기준) |
 |------|------------|
-| 1분위 | 0원 ~ 100만원 |
-| 2분위 | 100만원 ~ 200만원 |
-| 3분위 | 200만원 ~ 300만원 |
-| 4분위 | 300만원 ~ 400만원 |
-| 5분위 | 400만원 이상 |
+| 1분위 | 0 ~ 100 |
+| 2분위 | 101 ~ 1,000 |
+| 3분위 | 1,001 ~ 10,000 |
+| 4분위 | 10,001 ~ 100,000 |
+| 5분위 | 100,000 초과 |
 
 ```c
 /* 이름 및 주민등록번호 기반 소득분위 실시간 분류 쿼리 */
@@ -102,16 +103,16 @@ EXEC SQL PREPARE S FROM :dynstmt;
 | `Disorder` | `main.pc` | 복지·보호관찰 대상자 검색 및 관리 상태 업데이트 |
 | `Income Bracket Function` | `new_select_xy.pc` | 소득분위 실시간 분류 |
 | `Resident Information Inquiry` | `new_select_xy.pc` | 주민 정보 조회 |
-| `Resident Information Inquiry(and Update)` | `new_select_xy.pc` | 주민 정보 조회 및 수정 |
 | `Marriage Registration` | `select_update.pc` | 혼인 신고 조회 및 업데이트 |
 | `freemeals` | `new_select_xy.pc` | 무료급식 대상자 조회 |
+| `Disability Benefit Management` | `new_select_xy.pc` | 장애인 등급 조회 및 복지 혜택 갱신 |
 
 ## 실행 결과
 
 ### 메인 화면
 <img src="docs/static/main_화면.jpg" width="650" height="400" />
 
-시스템 실행 시 주민 관리 기능과 조회 기능을 선택할 수 있는 메인 화면입니다.
+시스템 실행 시 전체 메뉴(개인정보조회·보호관찰정보·신혼신고·무료급식정보·소득분위조회)를 보여주는 화면이며, 이어서 보호관찰 대상자 조회·검색·연락 관리 기능을 수행합니다.
 
 ### 데이터베이스 전체 조회 화면
 <img src="docs/static/db_정보조회.png" height="400" />

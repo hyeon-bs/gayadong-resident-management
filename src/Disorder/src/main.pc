@@ -308,18 +308,12 @@ void Update_pro()
 {
 
 EXEC SQL BEGIN DECLARE SECTION;
- char contact_f [100];
-   char selectbp3 [1000];
-   char updatebp3 [1000];
-
-char sqlcontact[100];
     char  temp[100];
     char dynstmt22[1000];
  char dynstmt23[1000];
  char dynstmt24[1000];
 EXEC SQL END DECLARE SECTION;
 
-  int intcontact_f = contact_f-48;
  int x, y, count=0, i ;
 
 x=22;
@@ -341,8 +335,6 @@ gets(temp);
 	gotoxy(52,23);
    	printf("연락을 취소합니다");
 	}
- 	if( intcontact_f=5)
-	{
 	sprintf(dynstmt23,"SELECT p_contact_f FROM probation");
   	 EXEC SQL EXECUTE IMMEDIATE :dynstmt23;
 	
@@ -353,7 +345,6 @@ gets(temp);
    	 
   	   y = 10 ;	
 	break;
-	}
 	
 	
     }
